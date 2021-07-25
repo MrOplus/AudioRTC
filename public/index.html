@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SoundRTC</title>
+</head>
+<body>
+<video id="stream" playsinline controls></video>
+<script src="simplepeer.min.js" type="text/javascript"></script>
+<script>
+    var peerConnection = new SimplePeer({
+        initiator : true,
+    });
+    peerConnection.on('stream',function (s){
+        console.log("got stream");
+        let item = document.getElementById("stream");
+        //s.getVideoTracks()[0].enabled = false;
+        item.srcObject = s;
+    });
+    peerConnection.on('data',function (data){
+        console.info(">>>>>>>>>>>>>>>"  + data);
+    });
+    peerConnection.on('connect', function () {
+        peerConnection.send('Hello From Client');
+    })
+
+    const ws = new WebSocket(`ws://${window.location.hostname}:65432/`);
+    ws.onopen = function() {
+
+    };
+    ws.onmessage = function(e) {
+        parseMessage(e.data);
+    };
+    function parseMessage(object){
+        let data = JSON.parse(object);
+        switch (data.topic){
+            case "error":
+                alert("Error :\n"+data.message);
+                break;
+            case "info":
+                alert("Info :\n"+data.message);
+                break;
+            case "pong":
+                makeAnOffer()
+                break;
+            case "signal":
+                peerConnection.signal(data.object)
+                break;
+        }
+    }
+    function makeAnOffer(){
+        peerConnection.on('signal',function (s){
+            console.log(s);
+            ws.send(JSON.stringify({
+                topic: "signal",
+                object : s
+            }));
+        });
+
+    }
+</script>
+</body>
+</html>

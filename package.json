@@ -1,0 +1,29 @@
+{
+  "name": "soundrtc",
+  "version": "1.0.0",
+  "description": "Share desktop audio using WebRTC",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kooroshh/SoundRTC.git"
+  },
+  "keywords": [
+    "WebRTC",
+    "NodeJS"
+  ],
+  "author": "Kooroshh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kooroshh/SoundRTC/issues"
+  },
+  "homepage": "https://github.com/kooroshh/SoundRTC#readme",
+  "devDependencies": {
+    "electron": "^13.1.0",
+    "express": "^4.17.1",
+    "ws": "^7.4.6"
+  }
+}
